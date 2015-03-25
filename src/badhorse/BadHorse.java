@@ -25,6 +25,8 @@ public class BadHorse {
     String line = br.readLine();
     int c = 1;
 
+    int observe = 6;
+
     while ((line = br.readLine()) != null) {
       final int count = Integer.parseInt(line);
       final List<String> input = new ArrayList<>();
@@ -33,11 +35,19 @@ public class BadHorse {
         input.add(br.readLine());
       }
 
-      final List<String> opponents = opponents(input);
-      final Map<String, List<String>> conflicts = conflicts(opponents, input);
-      final boolean result = splittable(conflicts, input);
+      if (c == observe) { System.out.println(input); }
 
-      System.out.println("Case #" + (c++) + ": " + (result ? "Yes" : "No"));
+      final List<String> opponents = opponents(input);
+      if (c == observe) { System.out.println(opponents); }
+
+      final Map<String, List<String>> conflicts = conflicts(opponents, input);
+      if (c == observe) { System.out.println(conflicts); }
+
+      final boolean result = splittable(conflicts, input);
+      if (c == observe) { System.out.println(result); }
+
+      //System.out.println("Case #" + (c++) + ": " + (result ? "Yes" : "No"));
+      c++;
     }
   }
 
@@ -60,7 +70,7 @@ public class BadHorse {
         if (opponent.equals(s.split(" ")[0])) {
           cs.add(s.split(" ")[1]);
         } else if (opponent.equals(s.split(" ")[1])) {
-          cs.add(s.split(" ")[1]);
+          cs.add(s.split(" ")[0]);
         }
       }
 
