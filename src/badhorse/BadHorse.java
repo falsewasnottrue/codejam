@@ -4,7 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class BadHorse {
 
@@ -28,93 +32,56 @@ public class BadHorse {
       for (int i=0; i<count; i++) {
         input.add(br.readLine());
       }
-      boolean result = splitable(input);
+
+      final List<String> opponents = opponents(input);
+      final Map<String, List<String>> conflicts = conflicts(opponents, input);
+      final boolean result = splittable(conflicts, input);
 
       System.out.println("Case #" + (c++) + ": " + (result ? "Yes" : "No"));
     }
   }
 
-  private static boolean splitable(List<String> input) {
-    final List<String> group1 = new ArrayList<>();
-    final List<String> group2 = new ArrayList<>();
+  private static List<String> opponents(List<String> input) {
+    Set<String> oppSet = new HashSet<>();
+    for (final String s : input) {
+      oppSet.add(s.split(" ")[0]);
+      oppSet.add(s.split(" ")[1]);
+    }
 
-    final List<String> noconflict = new ArrayList<>();
-    for (final String i : input) {
-      final String opp1 = i.split(" ")[0];
-      final String opp2 = i.split(" ")[1];
+    return new ArrayList<>(oppSet);
+  }
 
-      if (group1.contains(opp1)) {
-        // opp2 must go into group2
-        if (group2.contains(opp2)) {
-          return false;
-        } else {
-          group2.add(opp2);
+  private static Map<String, List<String>> conflicts(List<String> opponents, List<String> input) {
+    Map<String, List<String>> conflicts = new HashMap<>();
+
+    for (String opponent : opponents) {
+      List<String> cs = new ArrayList();
+      for (final String s : input) {
+        if (opponent.equals(s.split(" ")[0])) {
+          cs.add(s.split(" ")[1]);
+        } else if (opponent.equals(s.split(" ")[1])) {
+          cs.add(s.split(" ")[1]);
         }
-      } else if (group2.contains(opp2)) {
-        // opp2 must go into group1
-        if (group1.contains(opp2)) {
+      }
+
+      conflicts.put(opponent, cs);
+    }
+
+    return conflicts;
+  }
+
+  private static boolean splittable(Map<String, List<String>> conflicts, List<String> input) {
+    for (List<String> cs : conflicts.values()) {
+      for (String s : input) {
+        String opp0 = s.split(" ")[0];
+        String opp1 = s.split(" ")[1];
+
+        if (cs.contains(opp0) && cs.contains(opp1)) {
           return false;
-        } else {
-          group1.add(opp1);
         }
-      } else if (group1.contains(opp2)) {
-        // opp1 must go into group2
-        if (group2.contains(opp1)) {
-          return false;
-        } else {
-          group2.add(opp1);
-        }
-      } else if (group2.contains(opp2)) {
-        // opp1 must go into group1
-        if (group1.contains(opp1)) {
-          return false;
-        } else {
-          group1.add(opp1);
-        }
-      } else {
-        // opp1, opp2 are in neither group
-        noconflict.add(opp1 + " " + opp2);
       }
     }
 
-    for (final String i : noconflict) {
-      final String opp1 = i.split(" ")[0];
-      final String opp2 = i.split(" ")[1];
-
-      if (group1.contains(opp1)) {
-        // opp2 must go into group2
-        if (group2.contains(opp2)) {
-          return false;
-        } else {
-          group2.add(opp2);
-        }
-      } else if (group2.contains(opp2)) {
-        // opp2 must go into group1
-        if (group1.contains(opp2)) {
-          return false;
-        } else {
-          group1.add(opp1);
-        }
-      } else if (group1.contains(opp2)) {
-        // opp1 must go into group2
-        if (group2.contains(opp1)) {
-          return false;
-        } else {
-          group2.add(opp1);
-        }
-      } else if (group2.contains(opp2)) {
-        // opp1 must go into group1
-        if (group1.contains(opp1)) {
-          return false;
-        } else {
-          group1.add(opp1);
-        }
-      } else {
-        // opp1, opp2 are in neither group
-        group1.add(opp1);
-        group2.add(opp2);
-      }
-    }
     return true;
   }
 }
