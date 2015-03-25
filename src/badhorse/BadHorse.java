@@ -10,6 +10,11 @@ public class BadHorse {
 
   public static void main(String... args) throws Exception {
 
+    // TODO new idea:
+    //   find all names
+    //   find conflicts for all names
+    //   see if conflicts for any name contain a conflict
+
     final String filename  = "src/badhorse/A-small-practice-1.in";
 
     final BufferedReader br = new BufferedReader(new FileReader(new File(filename)));
