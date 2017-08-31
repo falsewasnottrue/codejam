@@ -1,7 +1,5 @@
 package magicka;
 
-import scala.Char;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

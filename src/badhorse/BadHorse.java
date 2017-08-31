@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * https://code.google.com/codejam/contest/2933486/dashboard
+ */
 public class BadHorse {
 
   public static void main(String... args) throws Exception {
